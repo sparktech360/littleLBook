@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         LinuxDo 小红书风格
 // @namespace    http://tampermonkey.net/
-// @version      2.2
+// @version      2.3
 // @license      MIT
 // @description  将LinuxDo改造成小红书风格瀑布流布局，支持自定义主题色
 // @author       JackyLiii
@@ -1109,6 +1109,163 @@
                     border-top: 3px solid var(--xhs-c) !important;
                     border-radius: 20px 20px 0 0 !important;
                 }
+
+                /* ===== 推荐话题等高网格布局 ===== */
+                body.xhs-on.xhs-topic .topics .xhs-grid {
+                    column-count: unset !important;
+                    display: grid !important;
+                    grid-template-columns: repeat(5, 1fr) !important;
+                    gap: 16px !important;
+                    padding: 20px 0 !important;
+                }
+                @media (max-width: 1400px) {
+                    body.xhs-on.xhs-topic .topics .xhs-grid {
+                        grid-template-columns: repeat(4, 1fr) !important;
+                    }
+                }
+                @media (max-width: 1100px) {
+                    body.xhs-on.xhs-topic .topics .xhs-grid {
+                        grid-template-columns: repeat(3, 1fr) !important;
+                    }
+                }
+                @media (max-width: 768px) {
+                    body.xhs-on.xhs-topic .topics .xhs-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 12px !important;
+                    }
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card {
+                    margin-bottom: 0 !important;
+                    height: 100% !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-cover {
+                    flex-shrink: 0 !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-bg {
+                    min-height: 140px !important;
+                    height: 140px !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-bg.size-tall,
+                body.xhs-on.xhs-topic .topics .xhs-card-bg.size-normal {
+                    min-height: 140px !important;
+                    height: 140px !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-img-box {
+                    height: 140px !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-img-box.size-tall,
+                body.xhs-on.xhs-topic .topics .xhs-card-img-box.size-normal {
+                    height: 140px !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-body {
+                    flex: 1 !important;
+                    display: flex !important;
+                    flex-direction: column !important;
+                    padding: 12px !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-title {
+                    font-size: 13px !important;
+                    -webkit-line-clamp: 2 !important;
+                    margin-bottom: 8px !important;
+                    flex: 1 !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-meta {
+                    margin-top: auto !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-stats {
+                    display: none !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-emoji {
+                    font-size: 24px !important;
+                    margin-bottom: 8px !important;
+                }
+                body.xhs-on.xhs-topic .topics .xhs-card-excerpt {
+                    font-size: 12px !important;
+                    line-height: 1.6 !important;
+                    -webkit-line-clamp: 3 !important;
+                }
+
+                /* ===== 话题底部按钮小红书风格 ===== */
+                body.xhs-on.xhs-topic .topic-footer-main-buttons {
+                    background: #fff !important;
+                    border-radius: 16px !important;
+                    padding: 12px 16px !important;
+                    margin: 16px 0 !important;
+                    box-shadow: 0 2px 12px rgba(0,0,0,0.04) !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: space-between !important;
+                    gap: 12px !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-main-buttons__actions {
+                    display: flex !important;
+                    gap: 8px !important;
+                    flex-wrap: wrap !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-button {
+                    background: var(--xhs-light) !important;
+                    border: none !important;
+                    border-radius: 20px !important;
+                    padding: 8px 16px !important;
+                    font-size: 13px !important;
+                    font-weight: 500 !important;
+                    color: var(--xhs-c) !important;
+                    transition: all 0.2s !important;
+                    display: inline-flex !important;
+                    align-items: center !important;
+                    gap: 6px !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-button:hover {
+                    background: rgba(var(--xhs-rgb), 0.2) !important;
+                    transform: translateY(-1px) !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-button svg {
+                    width: 14px !important;
+                    height: 14px !important;
+                    fill: var(--xhs-c) !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-button.btn-primary {
+                    background: linear-gradient(135deg, var(--xhs-c), var(--xhs-lighter)) !important;
+                    color: #fff !important;
+                    padding: 10px 24px !important;
+                    font-weight: 600 !important;
+                    box-shadow: 0 4px 12px rgba(var(--xhs-rgb), 0.3) !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-button.btn-primary:hover {
+                    box-shadow: 0 6px 20px rgba(var(--xhs-rgb), 0.4) !important;
+                    transform: translateY(-2px) !important;
+                }
+                body.xhs-on.xhs-topic .topic-footer-button.btn-primary svg {
+                    fill: #fff !important;
+                }
+
+                /* ===== 全局通知浅色主题 ===== */
+                body.xhs-on .global-notice .alert-global-notice {
+                    background: var(--xhs-light) !important;
+                    border: 1px solid rgba(var(--xhs-rgb), 0.15) !important;
+                    border-radius: 12px !important;
+                    color: var(--xhs-c) !important;
+                    padding: 12px 20px !important;
+                    margin: 12px 0 !important;
+                }
+                body.xhs-on .global-notice .alert-global-notice .text {
+                    color: #333 !important;
+                }
+                body.xhs-on .global-notice .alert-global-notice .text strong {
+                    color: var(--xhs-c) !important;
+                    font-weight: 600 !important;
+                }
+                body.xhs-on .global-notice .alert-global-notice .text a {
+                    color: var(--xhs-c) !important;
+                    font-weight: 500 !important;
+                    text-decoration: none !important;
+                    border-bottom: 1px dashed var(--xhs-c) !important;
+                }
+                body.xhs-on .global-notice .alert-global-notice .text a:hover {
+                    border-bottom-style: solid !important;
+                }
             `;
 
             const style = document.createElement('style');
@@ -1159,7 +1316,7 @@
                     <div class="xhs-panel-title">
                         <span>📕</span>
                         <span>小红书模式</span>
-                        <span class="xhs-panel-ver">v2.2</span>
+                        <span class="xhs-panel-ver">v2.3</span>
                     </div>
                     <div class="xhs-panel-close">×</div>
                 </div>
