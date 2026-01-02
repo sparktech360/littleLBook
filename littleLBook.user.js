@@ -6,6 +6,11 @@
 // @description  将LinuxDo改造成小红书风格瀑布流布局，支持自定义主题色
 // @author       JackyLiii
 // @match        https://linux.do/*
+// @icon         https://linux.do/uploads/default/optimized/3X/9/d/9dd49731091ce8656e94433a26a3ef36062b3994_2_32x32.png
+// @updateURL    https://raw.githubusercontent.com/caigg188/littleLBook/main/littleLBook.user.js
+// @downloadURL  https://raw.githubusercontent.com/caigg188/littleLBook/main/littleLBook.user.js
+// @supportURL   https://github.com/caigg188/littleLBook/issues
+// @homepageURL  https://github.com/caigg188/littleLBook
 // @grant        GM_addStyle
 // @grant        GM_setValue
 // @grant        GM_getValue

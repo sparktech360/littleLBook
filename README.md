@@ -1,4 +1,4 @@
-# 📕 LinuxDo 小红书风格
+# 📕 LinuxDo仿小红书主题——littleLBook
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-2.1-ff2442?style=flat-square" alt="version">
@@ -167,7 +167,7 @@ littleLBook.user.js
 **JackyLiii**
 
 - LinuxDo: [@jackyliii](https://linux.do/u/jackyliii/summary)
-- GitHub: [@JackyLiii](https://github.com/JackyLiii)
+- GitHub: [@JackyLiii](https://github.com/caigg188)
 
 ---
 
