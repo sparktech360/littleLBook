@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         小L书——LinuxDo仿小红书主题
 // @namespace    http://tampermonkey.net/
-// @version      2.6
+// @version      2.7
 // @license      MIT
 // @description  将LinuxDo改造成小红书风格瀑布流布局，支持自定义主题色
 // @author       JackyLiii
@@ -1116,12 +1116,6 @@
                     margin-top: auto !important;
                 }
 
-                .xhs-card-excerpt {
-                    flex: 1 !important;
-                    display: flex !important;
-                    flex-direction: column !important;
-                }
-
                 /* 手绘装饰 */
                 .xhs-deco {
                     position: absolute;
@@ -1568,29 +1562,57 @@
                 }
 
                 body.xhs-on.xhs-topic .cooked,
-                body.xhs-on.xhs-topic .cooked p,
-                body.xhs-on.xhs-topic .cooked li,
-                body.xhs-on.xhs-topic .cooked span,
-                body.xhs-on.xhs-topic .cooked div {
+                body.xhs-on.xhs-topic .cooked p:not(.onebox p):not(.onebox-body p),
+                body.xhs-on.xhs-topic .cooked li:not(.onebox li):not(.onebox-body li),
+                body.xhs-on.xhs-topic .cooked span:not(.onebox span):not(.onebox-body span),
+                body.xhs-on.xhs-topic .cooked div:not(.onebox):not(.onebox-body):not(.onebox div):not(.onebox-body div):not(.github-row) {
                     font-size: 15px !important;
                     line-height: 1.8 !important;
                     color: var(--xhs-text) !important;
                 }
 
-                body.xhs-on.xhs-topic .cooked a { color: var(--xhs-c) !important; }
-                body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar) {
+                /* onebox (GitHub卡片等) 使用默认样式 */
+                body.xhs-on.xhs-topic .cooked aside.onebox {
+                    all: revert !important;
+                    box-shadow: 0 0 0 1px var(--onebox-border-color), 0 0 0 4px var(--onebox-shadow-color) !important;
+                    border-radius: var(--d-border-radius) !important;
+                    margin-bottom: 1em !important;
+                    padding: 1em !important;
+                    font-size: var(--font-0) !important;
+                    background: var(--secondary) !important;
+                    color: var(--primary) !important;
+                }
+                body.xhs-on.xhs-topic .cooked aside.onebox * {
+                    color: inherit !important;
+                    font-size: inherit !important;
+                    line-height: normal !important;
+                }
+                body.xhs-on.xhs-topic .cooked aside.onebox a {
+                    color: var(--tertiary) !important;
+                }
+                body.xhs-on.xhs-topic .cooked aside.onebox h3 a {
+                    color: var(--primary) !important;
+                    font-weight: bold !important;
+                }
+                body.xhs-on.xhs-topic .cooked aside.onebox img {
+                    border-radius: var(--d-border-radius) !important;
+                    margin: 0 !important;
+                }
+
+                body.xhs-on.xhs-topic .cooked a:not(.onebox a):not(.onebox-body a) { color: var(--xhs-c) !important; }
+                body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar):not(.onebox img):not(.onebox-body img) {
                     border-radius: 12px !important;
                     margin: 12px 0 !important;
                 }
-                body.xhs-on.xhs-topic .cooked blockquote {
+                body.xhs-on.xhs-topic .cooked blockquote:not(.onebox blockquote) {
                     border-left: 4px solid var(--xhs-c) !important;
                     background: var(--xhs-light) !important;
                     border-radius: 0 12px 12px 0 !important;
                     padding: 16px 20px !important;
                     margin: 16px 0 !important;
                 }
-                body.xhs-on.xhs-topic .cooked pre { border-radius: 12px !important; }
-                body.xhs-on.xhs-topic .cooked code:not(pre code) {
+                body.xhs-on.xhs-topic .cooked pre:not(.onebox pre) { border-radius: 12px !important; }
+                body.xhs-on.xhs-topic .cooked code:not(pre code):not(.onebox code) {
                     background: var(--xhs-light) !important;
                     color: var(--xhs-c) !important;
                     padding: 2px 8px !important;
@@ -1773,11 +1795,11 @@
                     overflow-wrap: break-word !important;
                     word-wrap: break-word !important;
                 }
-                body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar) {
+                body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar):not(.onebox img):not(.onebox-body img) {
                     max-width: 100% !important;
                     height: auto !important;
                 }
-                body.xhs-on.xhs-topic .cooked pre {
+                body.xhs-on.xhs-topic .cooked pre:not(.onebox pre) {
                     max-width: 100% !important;
                     overflow-x: auto !important;
                 }
@@ -1813,20 +1835,20 @@
                     line-height: 1.8 !important;
                 }
 
-                body.xhs-on.xhs-topic .cooked a { color: var(--xhs-c) !important; }
-                body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar) {
+                body.xhs-on.xhs-topic .cooked a:not(.onebox a):not(.onebox-body a) { color: var(--xhs-c) !important; }
+                body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar):not(.onebox img):not(.onebox-body img) {
                     border-radius: 12px !important;
                     margin: 12px 0 !important;
                 }
-                body.xhs-on.xhs-topic .cooked blockquote {
+                body.xhs-on.xhs-topic .cooked blockquote:not(.onebox blockquote) {
                     border-left: 4px solid var(--xhs-c) !important;
                     background: var(--xhs-light) !important;
                     border-radius: 0 12px 12px 0 !important;
                     padding: 16px 20px !important;
                     margin: 16px 0 !important;
                 }
-                body.xhs-on.xhs-topic .cooked pre { border-radius: 12px !important; }
-                body.xhs-on.xhs-topic .cooked code:not(pre code) {
+                body.xhs-on.xhs-topic .cooked pre:not(.onebox pre) { border-radius: 12px !important; }
+                body.xhs-on.xhs-topic .cooked code:not(pre code):not(.onebox code) {
                     background: var(--xhs-light) !important;
                     color: var(--xhs-c) !important;
                     padding: 2px 8px !important;
