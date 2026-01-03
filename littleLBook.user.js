@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         小L书——LinuxDo仿小红书主题
 // @namespace    http://tampermonkey.net/
-// @version      2.8
+// @version      2.9
 // @license      MIT
 // @description  将LinuxDo改造成小红书风格瀑布流布局，支持自定义主题色
 // @author       JackyLiii
@@ -340,9 +340,9 @@
         },
 
         themes: {
-            '小红书红': '#ff2442',
+            '小L书红': '#ff2442',
             '天空蓝': '#1890ff',
-            '清新绿': '#52c41a',
+            '清新绿': '#59cf1eff',
             '神秘紫': '#722ed1',
             '活力橙': '#fa541c',
             '少女粉': '#eb2f96'
@@ -460,6 +460,28 @@
             } else {
                 setTimeout(fn, 50);
             }
+        },
+
+        // 检测是否为移动端设备
+        isMobile() {
+            // 检测触摸设备 + 屏幕宽度
+            const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const isNarrowScreen = window.innerWidth <= 768;
+            // User-Agent 检测作为补充
+            const mobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            return (hasTouchScreen && isNarrowScreen) || mobileUA;
+        },
+
+        // 检测是否为低带宽/省流量模式
+        isDataSaverMode() {
+            // 检测 Save-Data 请求头（通过 navigator.connection）
+            if ('connection' in navigator) {
+                const conn = navigator.connection;
+                if (conn.saveData) return true;
+                // 检测慢速网络
+                if (conn.effectiveType && ['slow-2g', '2g'].includes(conn.effectiveType)) return true;
+            }
+            return false;
         }
     };
 
@@ -745,6 +767,176 @@
                     from { opacity: 1; transform: translateX(-50%) translateY(0); }
                     to { opacity: 0; transform: translateX(-50%) translateY(20px); }
                 }
+
+                /* ===== 移动端适配 ===== */
+                @media (max-width: 768px) {
+                    /* 设置面板全屏 */
+                    .xhs-panel {
+                        top: 0 !important;
+                        right: 0 !important;
+                        left: 0 !important;
+                        bottom: 0 !important;
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        max-height: 100% !important;
+                        border-radius: 0 !important;
+                        transform: translateY(100%) !important;
+                    }
+                    .xhs-panel.show {
+                        transform: translateY(0) !important;
+                    }
+                    .xhs-panel-header {
+                        padding: 20px !important;
+                        position: sticky !important;
+                        top: 0 !important;
+                    }
+                    .xhs-panel-body {
+                        padding: 16px !important;
+                        padding-bottom: 100px !important;
+                    }
+                    .xhs-panel-footer {
+                        position: fixed !important;
+                        bottom: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        padding: 16px 20px !important;
+                        padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+                        background: #fff !important;
+                        border-top: 1px solid #eee !important;
+                    }
+                    .xhs-colors {
+                        grid-template-columns: repeat(3, 1fr) !important;
+                        gap: 10px !important;
+                    }
+                    .xhs-color {
+                        padding: 12px 8px !important;
+                    }
+                    .xhs-color-dot {
+                        width: 32px !important;
+                        height: 32px !important;
+                    }
+                    .xhs-row {
+                        padding: 14px 16px !important;
+                    }
+                    .xhs-switch {
+                        width: 50px !important;
+                        height: 28px !important;
+                    }
+                    .xhs-switch::after {
+                        width: 24px !important;
+                        height: 24px !important;
+                    }
+                    .xhs-switch.on::after {
+                        transform: translateX(22px) !important;
+                    }
+                    
+                    /* 设置按钮增大触摸区域 */
+                    .xhs-btn {
+                        width: 44px !important;
+                        height: 44px !important;
+                    }
+                    .xhs-btn span {
+                        font-size: 24px !important;
+                    }
+                }
+
+                /* 更小屏幕的额外适配 */
+                @media (max-width: 375px) {
+                    .xhs-colors {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    .xhs-panel-body {
+                        padding: 12px !important;
+                        padding-bottom: 100px !important;
+                    }
+                    .xhs-row-label {
+                        font-size: 12px !important;
+                    }
+                    .xhs-row-desc {
+                        font-size: 9px !important;
+                    }
+                }
+
+                /* 触摸设备优化 - 禁用 hover 效果 */
+                @media (hover: none) and (pointer: coarse) {
+                    .xhs-card:hover {
+                        transform: none !important;
+                        box-shadow: 0 2px 8px var(--xhs-shadow) !important;
+                    }
+                    .xhs-card:active {
+                        transform: scale(0.98) !important;
+                        opacity: 0.9;
+                    }
+                    .xhs-switch:active {
+                        transform: scale(0.95);
+                    }
+                    .xhs-color:active {
+                        transform: scale(0.95);
+                    }
+                    .xhs-btn:active {
+                        transform: scale(0.9);
+                    }
+                }
+
+                /* ===== 暗色模式设置面板适配 ===== */
+                body.xhs-dark .xhs-panel {
+                    background: #2d2d2d !important;
+                }
+                body.xhs-dark .xhs-panel-body {
+                    background: #2d2d2d !important;
+                }
+                body.xhs-dark .xhs-row {
+                    background: #3d3d3d !important;
+                }
+                body.xhs-dark .xhs-row-label {
+                    color: #e0e0e0 !important;
+                }
+                body.xhs-dark .xhs-row-desc {
+                    color: #888 !important;
+                }
+                body.xhs-dark .xhs-section-title {
+                    color: #888 !important;
+                }
+                body.xhs-dark .xhs-color {
+                    background: #3d3d3d !important;
+                }
+                body.xhs-dark .xhs-color:hover {
+                    background: #4d4d4d !important;
+                }
+                body.xhs-dark .xhs-color.on {
+                    background: #2d2d2d !important;
+                }
+                body.xhs-dark .xhs-color-name {
+                    color: #aaa !important;
+                }
+                body.xhs-dark .xhs-custom {
+                    background: #3d3d3d !important;
+                }
+                body.xhs-dark .xhs-custom-label {
+                    color: #aaa !important;
+                }
+                body.xhs-dark .xhs-panel-footer {
+                    background: #252525 !important;
+                    border-top-color: #404040 !important;
+                }
+                body.xhs-dark .xhs-footer-author {
+                    color: #888 !important;
+                }
+                body.xhs-dark .xhs-select {
+                    background: #3d3d3d !important;
+                    border-color: #555 !important;
+                    color: #e0e0e0 !important;
+                }
+                body.xhs-dark .xhs-switch {
+                    background: #555 !important;
+                }
+                
+                /* 移动端暗色模式面板 footer */
+                @media (max-width: 768px) {
+                    body.xhs-dark .xhs-panel-footer {
+                        background: #252525 !important;
+                    }
+                }
             `);
         },
 
@@ -784,6 +976,8 @@
                     background: ${isDark ? '#1e1e1e' : '#fff'} !important;
                     box-shadow: 0 1px 0 var(--xhs-c), 0 2px 12px var(--xhs-shadow) !important;
                     border: none !important;
+                    z-index: 1100 !important;
+                    position: relative !important;
                 }
 
                 body.xhs-on .d-header-icons .btn:hover,
@@ -793,10 +987,10 @@
 
                 body.xhs-on .alert.alert-info.clickable {
                     position: fixed !important;
-                    top: 12px !important;
+                    top: 60px !important;
                     left: 50% !important;
                     transform: translateX(-50%) !important;
-                    z-index: 9998 !important;
+                    z-index: 99999 !important;
                     width: auto !important;
                     max-width: 90vw !important;
                     display: inline-flex !important;
@@ -818,6 +1012,10 @@
                 body.xhs-on .alert.alert-info.clickable span { color: #fff !important; }
 
                 body.xhs-on .d-icon-circle { color: var(--xhs-c) !important; fill: var(--xhs-c) !important; }
+                body.xhs-on .badge-notification {
+                    position: relative !important;
+                    z-index: 9999 !important;
+                }
                 body.xhs-on .badge-notification.new-topic,
                 body.xhs-on .badge-notification.unread-posts { background: var(--xhs-c) !important; }
 
@@ -1507,9 +1705,44 @@
                     border-top: 3px solid var(--xhs-c) !important;
                 }
 
+                /* ===== 首次发帖提示样式 ===== */
+                body.xhs-on.xhs-topic .post-notice {
+                    background: var(--xhs-light) !important;
+                    border: 1px solid rgba(var(--xhs-rgb), 0.2) !important;
+                    border-radius: 12px !important;
+                    padding: 12px 16px !important;
+                    margin: 12px 20px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    font-size: 13px !important;
+                    color: var(--xhs-text-secondary) !important;
+                    max-width: calc(100% - 40px) !important;
+                    box-sizing: border-box !important;
+                    overflow: hidden !important;
+                }
+                body.xhs-on.xhs-topic .post-notice.new-user {
+                    background: linear-gradient(135deg, rgba(var(--xhs-rgb), 0.08), rgba(var(--xhs-rgb), 0.15)) !important;
+                }
+                body.xhs-on.xhs-topic .post-notice p {
+                    margin: 0 !important;
+                    color: var(--xhs-text) !important;
+                    flex: 1 !important;
+                    min-width: 0 !important;
+                    word-wrap: break-word !important;
+                    overflow-wrap: break-word !important;
+                }
+                body.xhs-on.xhs-topic .post-notice .emoji {
+                    width: 20px !important;
+                    height: 20px !important;
+                    flex-shrink: 0 !important;
+                }
+
+                /* v2.8 原版布局 - 不做任何修改 */
                 body.xhs-on.xhs-topic .topic-post article.boxed {
                     display: flex !important;
                     flex-direction: row !important;
+                    flex-wrap: wrap !important;
                 }
                 body.xhs-on.xhs-topic .topic-avatar {
                     order: -1 !important;
@@ -1527,6 +1760,34 @@
                     border: 3px solid var(--xhs-light) !important;
                     border-radius: 50% !important;
                     box-shadow: 0 2px 8px rgba(var(--xhs-rgb), 0.15) !important;
+                }
+
+                /* 首次发帖提示 - 占据整行宽度，显示在顶部 */
+                body.xhs-on.xhs-topic .post-notice {
+                    order: -2 !important;
+                    width: 100% !important;
+                    flex-basis: 100% !important;
+                    background: var(--xhs-light) !important;
+                    border: 1px solid rgba(var(--xhs-rgb), 0.2) !important;
+                    border-radius: 12px !important;
+                    padding: 12px 16px !important;
+                    margin: 16px 20px 0 20px !important;
+                    font-size: 13px !important;
+                    color: var(--xhs-text-secondary) !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    box-sizing: border-box !important;
+                }
+                body.xhs-on.xhs-topic .post-notice.new-user {
+                    background: linear-gradient(135deg, rgba(var(--xhs-rgb), 0.08), rgba(var(--xhs-rgb), 0.15)) !important;
+                }
+                body.xhs-on.xhs-topic .post-notice p {
+                    margin: 0 !important;
+                    flex: 1 !important;
+                }
+                body.xhs-on.xhs-topic .post-notice .emoji {
+                    flex-shrink: 0 !important;
                 }
 
                 body.xhs-on.xhs-topic .names .username a {
@@ -1798,9 +2059,11 @@
                     border-top: 3px solid var(--xhs-c) !important;
                 }
 
+                /* v2.8 原版布局 */
                 body.xhs-on.xhs-topic .topic-post article.boxed {
                     display: flex !important;
                     flex-direction: row !important;
+                    flex-wrap: wrap !important;
                     width: 100% !important;
                     box-sizing: border-box !important;
                 }
@@ -1830,6 +2093,35 @@
                     border-radius: 50% !important;
                     box-shadow: 0 2px 8px rgba(var(--xhs-rgb), 0.15) !important;
                 }
+                /* 首次发帖提示 - 占据整行宽度，显示在顶部 */
+                body.xhs-on.xhs-topic .post-notice {
+                    order: -2 !important;
+                    width: 100% !important;
+                    flex-basis: 100% !important;
+                    background: var(--xhs-light) !important;
+                    border: 1px solid rgba(var(--xhs-rgb), 0.2) !important;
+                    border-radius: 10px !important;
+                    padding: 10px 14px !important;
+                    margin: 12px 16px 0 16px !important;
+                    font-size: 12px !important;
+                    color: var(--xhs-text-secondary) !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 8px !important;
+                    box-sizing: border-box !important;
+                }
+                body.xhs-on.xhs-topic .post-notice.new-user {
+                    background: linear-gradient(135deg, rgba(var(--xhs-rgb), 0.08), rgba(var(--xhs-rgb), 0.15)) !important;
+                }
+                body.xhs-on.xhs-topic .post-notice p {
+                    margin: 0 !important;
+                    flex: 1 !important;
+                }
+                body.xhs-on.xhs-topic .post-notice .emoji {
+                    flex-shrink: 0 !important;
+                    width: 18px !important;
+                    height: 18px !important;
+                }
 
                 /* 帖子详情页响应式布局 */
                 body.xhs-on.xhs-topic .post-stream,
@@ -1840,7 +2132,6 @@
                     min-width: 0 !important;
                     box-sizing: border-box !important;
                 }
-                /* 确保帖子统计信息在底部显示 */
                 body.xhs-on.xhs-topic .topic-map {
                     width: 100% !important;
                     max-width: 100% !important;
@@ -1866,15 +2157,34 @@
                     overflow-x: auto !important;
                 }
 
+                /* 移动端 post-notice 样式 */
                 @media (max-width: 900px) {
+                    /* 小屏幕保持 flex-wrap，让 post-notice 单独占一行 */
                     body.xhs-on.xhs-topic .topic-post article.boxed {
-                        flex-direction: column !important;
+                        flex-direction: row !important;
+                        flex-wrap: wrap !important;
+                    }
+                    /* .row 内头像和内容水平排列 */
+                    body.xhs-on.xhs-topic .topic-post article.boxed > .row {
+                        display: flex !important;
+                        flex-direction: row !important;
+                        align-items: flex-start !important;
+                        width: 100% !important;
+                        gap: 0 !important;
                     }
                     body.xhs-on.xhs-topic .topic-avatar {
-                        padding: 16px 16px 0 16px !important;
+                        padding: 14px 10px 14px 14px !important;
+                        order: -1 !important;
+                        flex-shrink: 0 !important;
                     }
                     body.xhs-on.xhs-topic .topic-body {
-                        padding: 16px !important;
+                        padding: 14px 14px 14px 0 !important;
+                        flex: 1 !important;
+                        min-width: 0 !important;
+                    }
+                    /* 移除 topic-meta-data 的左侧 margin，让昵称紧挨头像 */
+                    body.xhs-on.xhs-topic .topic-meta-data {
+                        margin-left: 0 !important;
                     }
                     body.xhs-on.xhs-topic .topic-avatar .avatar {
                         width: 40px !important;
@@ -1883,6 +2193,15 @@
                     body.xhs-on.xhs-topic #main-outlet {
                         padding-left: 8px !important;
                         padding-right: 8px !important;
+                    }
+                    /* 移动端 post-notice 样式调整 - 占满整行在顶部 */
+                    body.xhs-on.xhs-topic .post-notice {
+                        order: -2 !important;
+                        width: 100% !important;
+                        flex-basis: 100% !important;
+                        margin: 12px 12px 0 12px !important;
+                        padding: 10px 12px !important;
+                        font-size: 12px !important;
                     }
                 }
 
@@ -2030,6 +2349,218 @@
                     border-bottom-style: solid !important;
                 }
 
+                /* ===== 移动端全面优化 ===== */
+                @media (max-width: 768px) {
+                    /* 首页导航栏适配 */
+                    body.xhs-on .navigation-container,
+                    body.xhs-on section.navigation-container {
+                        padding: 10px 12px !important;
+                        margin-bottom: 12px !important;
+                        border-radius: 10px !important;
+                        flex-wrap: wrap !important;
+                    }
+                    
+                    /* 导航按钮缩小 */
+                    body.xhs-on ul.nav.nav-pills li a,
+                    body.xhs-on .nav-pills > li > a {
+                        padding: 5px 10px !important;
+                        font-size: 12px !important;
+                        border-radius: 14px !important;
+                    }
+                    
+                    /* 新建话题按钮 */
+                    body.xhs-on #create-topic,
+                    body.xhs-on button#create-topic {
+                        padding: 6px 12px !important;
+                        font-size: 12px !important;
+                        border-radius: 14px !important;
+                    }
+                    body.xhs-on #create-topic .d-button-label {
+                        display: none !important;
+                    }
+                    body.xhs-on #create-topic .d-icon {
+                        margin: 0 !important;
+                    }
+                    
+                    /* 类别选择器缩小 */
+                    body.xhs-on .category-breadcrumb,
+                    body.xhs-on .tag-drop {
+                        font-size: 12px !important;
+                    }
+                    
+                    /* 瀑布流布局优化 */
+                    .xhs-grid {
+                        padding: 12px 0 !important;
+                    }
+                    
+                    /* 首页主内容区域边距 */
+                    body.xhs-on #main-outlet {
+                        padding-left: 10px !important;
+                        padding-right: 10px !important;
+                    }
+                    
+                    /* 帖子详情页优化 */
+                    body.xhs-on.xhs-topic .topic-post {
+                        border-radius: 14px !important;
+                        margin-bottom: 12px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topic-post:first-child {
+                        border-top-width: 2px !important;
+                    }
+                    
+                    /* 帖子详情页内容 */
+                    body.xhs-on.xhs-topic .cooked {
+                        font-size: 14px !important;
+                        line-height: 1.7 !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .cooked blockquote:not(.onebox blockquote) {
+                        padding: 12px 14px !important;
+                        margin: 12px 0 !important;
+                        border-radius: 0 10px 10px 0 !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .cooked img:not(.emoji):not(.avatar):not(.onebox img):not(.onebox-body img) {
+                        border-radius: 10px !important;
+                        margin: 10px 0 !important;
+                    }
+                    
+                    /* 首次发帖提示移动端适配 */
+                    body.xhs-on.xhs-topic .post-notice {
+                        margin: 10px 12px !important;
+                        padding: 10px 12px !important;
+                        border-radius: 10px !important;
+                        font-size: 12px !important;
+                    }
+                    
+                    /* 底部按钮栏 */
+                    body.xhs-on.xhs-topic .topic-footer-main-buttons {
+                        padding: 10px 12px !important;
+                        margin: 12px 0 !important;
+                        border-radius: 12px !important;
+                        flex-direction: column !important;
+                        gap: 10px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topic-footer-main-buttons__actions {
+                        width: 100% !important;
+                        justify-content: center !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topic-footer-button {
+                        padding: 8px 14px !important;
+                        font-size: 12px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topic-footer-button.btn-primary {
+                        width: 100% !important;
+                        justify-content: center !important;
+                        padding: 12px 20px !important;
+                    }
+                    
+                    /* 推荐话题区域移动端布局 */
+                    body.xhs-on.xhs-topic .topics .xhs-grid {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                        gap: 10px !important;
+                        padding: 12px 0 !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topics .xhs-card-bg,
+                    body.xhs-on.xhs-topic .topics .xhs-card-img-box {
+                        height: 110px !important;
+                        min-height: 110px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topics .xhs-card-title {
+                        font-size: 12px !important;
+                        margin-bottom: 6px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topics .xhs-card-body {
+                        padding: 10px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topics .xhs-card-excerpt {
+                        font-size: 11px !important;
+                        -webkit-line-clamp: 2 !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .topics .xhs-card-emoji {
+                        font-size: 20px !important;
+                        margin-bottom: 6px !important;
+                    }
+                    
+                    /* 推荐/相关导航按钮 */
+                    body.xhs-on.xhs-topic .more-topics__container .nav-pills .btn {
+                        padding: 5px 12px !important;
+                        font-size: 12px !important;
+                        border-radius: 16px !important;
+                    }
+                    
+                    /* 回复框移动端优化 */
+                    body.xhs-on #reply-control {
+                        border-radius: 16px 16px 0 0 !important;
+                        border-top-width: 2px !important;
+                    }
+                    
+                    /* 帖子控制按钮增大触摸区域 */
+                    body.xhs-on.xhs-topic .post-controls .btn {
+                        min-width: 36px !important;
+                        min-height: 36px !important;
+                        padding: 8px !important;
+                    }
+                    
+                    /* 时间线隐藏（移动端空间有限） */
+                    body.xhs-on.xhs-topic .topic-timeline-container {
+                        display: none !important;
+                    }
+                    
+                    /* 侧边栏隐藏优化 */
+                    body.xhs-on .sidebar-wrapper {
+                        z-index: 1000 !important;
+                    }
+                }
+                
+                /* 更小屏幕（<= 480px）额外优化 */
+                @media (max-width: 480px) {
+                    body.xhs-on #main-outlet {
+                        padding-left: 6px !important;
+                        padding-right: 6px !important;
+                    }
+                    
+                    /* 小屏幕下头像进一步缩小 */
+                    body.xhs-on.xhs-topic .topic-avatar .avatar {
+                        width: 32px !important;
+                        height: 32px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .names .username a {
+                        font-size: 14px !important;
+                    }
+                    
+                    body.xhs-on.xhs-topic .cooked {
+                        font-size: 13px !important;
+                    }
+                    
+                    /* 导航栏按钮进一步缩小 */
+                    body.xhs-on ul.nav.nav-pills li a {
+                        padding: 4px 8px !important;
+                        font-size: 11px !important;
+                    }
+                    
+                    body.xhs-on .navigation-container {
+                        padding: 8px 10px !important;
+                    }
+                }
+                
+                /* 横屏模式优化 */
+                @media (max-height: 500px) and (orientation: landscape) {
+                    body.xhs-on.xhs-topic .topic-avatar .avatar {
+                        width: 36px !important;
+                        height: 36px !important;
+                    }
+                }
 
             `;
 
@@ -2250,20 +2781,53 @@
         observer: null,
         loadQueue: [],
         isLoading: false,
-        concurrency: 5, // 并发数
         
-        // 速率限制和退避策略
-        rateLimiter: {
-            requestCount: 0,           // 当前时间窗口内的请求数
-            windowStart: Date.now(),   // 时间窗口开始时间
-            maxRequestsPerWindow: 30,  // 每个时间窗口最大请求数
-            windowDuration: 10000,     // 时间窗口长度（10秒）
-            minInterval: 200,          // 请求最小间隔（毫秒）
-            lastRequestTime: 0,        // 上次请求时间
-            failureCount: 0,           // 连续失败次数
-            cooldownUntil: 0,          // 冷却结束时间
-            baseCooldown: 5000,        // 基础冷却时间（5秒）
-            maxCooldown: 60000,        // 最大冷却时间（60秒）
+        // 根据设备类型动态调整并发数
+        get concurrency() {
+            if (Utils.isDataSaverMode()) return 1; // 省流量模式只用1个并发
+            if (Utils.isMobile()) return 2;        // 移动端2个并发
+            return 4;                              // 桌面端4个并发
+        },
+        
+        // 速率限制和退避策略（根据设备类型调整）
+        get rateLimiter() {
+            const isMobile = Utils.isMobile();
+            const isDataSaver = Utils.isDataSaverMode();
+            
+            // 移动端/省流量模式使用更保守的参数
+            if (!this._rateLimiterCache) {
+                this._rateLimiterCache = {
+                    requestCount: 0,
+                    windowStart: Date.now(),
+                    lastRequestTime: 0,
+                    failureCount: 0,
+                    cooldownUntil: 0,
+                };
+            }
+            
+            // 动态参数（不缓存，实时计算）
+            return {
+                ...this._rateLimiterCache,
+                maxRequestsPerWindow: isDataSaver ? 10 : (isMobile ? 15 : 30),
+                windowDuration: isDataSaver ? 15000 : (isMobile ? 12000 : 10000),
+                minInterval: isDataSaver ? 500 : (isMobile ? 350 : 200),
+                baseCooldown: isDataSaver ? 10000 : (isMobile ? 8000 : 5000),
+                maxCooldown: 60000,
+            };
+        },
+        
+        // 更新速率限制缓存
+        _updateRateLimiter(updates) {
+            if (!this._rateLimiterCache) {
+                this._rateLimiterCache = {
+                    requestCount: 0,
+                    windowStart: Date.now(),
+                    lastRequestTime: 0,
+                    failureCount: 0,
+                    cooldownUntil: 0,
+                };
+            }
+            Object.assign(this._rateLimiterCache, updates);
         },
 
         styles: ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'],
@@ -2298,7 +2862,12 @@
         ],
 
         init() {
-            // 使用更大的预加载范围，提前加载即将可见的卡片
+            // 根据设备类型调整预加载范围
+            // 移动端使用更小的预加载范围，减少不必要的请求
+            const rootMargin = Utils.isMobile() 
+                ? (Utils.isDataSaverMode() ? '200px 0px' : '400px 0px')
+                : '800px 0px';
+            
             this.observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2310,7 +2879,7 @@
                         }
                     }
                 });
-            }, { rootMargin: '800px 0px', threshold: 0 });
+            }, { rootMargin, threshold: 0 });
         },
 
         _queueLoad(card, tid, priority = false) {
@@ -2335,12 +2904,11 @@
             
             // 重置时间窗口
             if (now - rl.windowStart > rl.windowDuration) {
-                rl.windowStart = now;
-                rl.requestCount = 0;
+                this._updateRateLimiter({ windowStart: now, requestCount: 0 });
             }
             
             // 检查时间窗口内的请求数限制
-            if (rl.requestCount >= rl.maxRequestsPerWindow) {
+            if (this._rateLimiterCache.requestCount >= rl.maxRequestsPerWindow) {
                 return false;
             }
             
@@ -2355,19 +2923,22 @@
         // 记录请求
         _recordRequest() {
             const now = Date.now();
-            this.rateLimiter.requestCount++;
-            this.rateLimiter.lastRequestTime = now;
+            this._updateRateLimiter({
+                requestCount: (this._rateLimiterCache?.requestCount || 0) + 1,
+                lastRequestTime: now
+            });
         },
         
         // 请求成功，重置失败计数
         _onRequestSuccess() {
-            this.rateLimiter.failureCount = 0;
+            this._updateRateLimiter({ failureCount: 0 });
         },
         
         // 请求失败，应用退避策略
         _onRequestFailure(statusCode) {
             const rl = this.rateLimiter;
-            rl.failureCount++;
+            const failureCount = (this._rateLimiterCache?.failureCount || 0) + 1;
+            this._updateRateLimiter({ failureCount });
             
             // 如果是 429 (Too Many Requests) 或 5xx 错误，应用更长的冷却
             let cooldownMultiplier = 1;
@@ -2379,11 +2950,11 @@
             
             // 指数退避：每次连续失败，冷却时间翻倍
             const cooldown = Math.min(
-                rl.baseCooldown * Math.pow(2, rl.failureCount - 1) * cooldownMultiplier,
+                rl.baseCooldown * Math.pow(2, failureCount - 1) * cooldownMultiplier,
                 rl.maxCooldown
             );
             
-            rl.cooldownUntil = Date.now() + cooldown;
+            this._updateRateLimiter({ cooldownUntil: Date.now() + cooldown });
             console.log(`[小L书] 请求失败，进入冷却期 ${cooldown / 1000} 秒`);
             
             // 显示冷却提示给用户
@@ -2448,19 +3019,20 @@
         _getWaitTime() {
             const now = Date.now();
             const rl = this.rateLimiter;
+            const cache = this._rateLimiterCache || {};
             
             // 如果在冷却期，返回剩余冷却时间
-            if (now < rl.cooldownUntil) {
-                return rl.cooldownUntil - now;
+            if (now < (cache.cooldownUntil || 0)) {
+                return cache.cooldownUntil - now;
             }
             
             // 如果达到窗口限制，等待窗口重置
-            if (rl.requestCount >= rl.maxRequestsPerWindow) {
-                return rl.windowStart + rl.windowDuration - now;
+            if ((cache.requestCount || 0) >= rl.maxRequestsPerWindow) {
+                return (cache.windowStart || now) + rl.windowDuration - now;
             }
             
             // 确保最小间隔
-            const timeSinceLastRequest = now - rl.lastRequestTime;
+            const timeSinceLastRequest = now - (cache.lastRequestTime || 0);
             if (timeSinceLastRequest < rl.minInterval) {
                 return rl.minInterval - timeSinceLastRequest;
             }
@@ -2589,7 +3161,7 @@
             // 重要关键词（优先标记）
             const importantPatterns = [
                 /^【NUM.*NUM】$/, // 数字+单位
-                /脚本|插件|订阅|抽奖|LDC|小鸡|节点|谷歌|求助|家宽|认证|苹果|安卓|上下文|工具|软件|网站|教程|攻略|方法|技巧|推荐|分享|免费|开源|源码|代码|项目|框架|模板|配置/,
+                /脚本|插件|始皇|公益|接码|订阅|抽奖|LDC|小鸡|节点|谷歌|求助|家宽|认证|苹果|安卓|上下文|工具|软件|网站|教程|攻略|方法|技巧|推荐|分享|免费|开源|源码|代码|项目|框架|模板|配置/,
                 /[A-Z][a-z]+[A-Z]|[a-z]+[A-Z]/, // 驼峰命名
                 /^\d+[%％]$/, // 百分比
             ];
