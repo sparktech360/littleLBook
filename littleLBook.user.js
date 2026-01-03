@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         小L书——LinuxDo仿小红书主题
 // @namespace    http://tampermonkey.net/
-// @version      2.9
+// @version      2.9.1
 // @license      MIT
 // @description  将LinuxDo改造成小红书风格瀑布流布局，支持自定义主题色
 // @author       JackyLiii
@@ -1318,6 +1318,23 @@
 
                 .xhs-card-meta {
                     margin-top: auto !important;
+                }
+
+                /* 活动时间 - 右下角 */
+                .xhs-card-activity {
+                    position: absolute;
+                    right: 10px;
+                    bottom: 10px;
+                    font-size: 11px;
+                    color: var(--xhs-text-muted);
+                    opacity: 0.7;
+                }
+                @media (max-width: 520px) {
+                    .xhs-card-activity {
+                        font-size: 10px;
+                        right: 8px;
+                        bottom: 8px;
+                    }
                 }
 
                 /* 手绘装饰 */
@@ -3127,6 +3144,10 @@
                     row.querySelector('.topic-list-data.liked') !== null ||
                     row.querySelector('.likes a')?.classList.contains('has-like');
 
+                // 提取活动时间
+                const activityEl = row.querySelector('td.activity .relative-date, td.num.activity .relative-date');
+                const activity = activityEl?.textContent?.trim() || '';
+
                 topics.push({
                     tid, title, href,
                     pinned: row.classList.contains('pinned'),
@@ -3137,7 +3158,8 @@
                     views: row.querySelector('td.views .number')?.textContent?.trim() || '0',
                     likes: row.querySelector('.likes .number')?.textContent?.trim() || '0',
                     excerpt: row.querySelector('.topic-excerpt span[dir="auto"]')?.textContent?.trim() || title,
-                    liked: isLiked
+                    liked: isLiked,
+                    activity: activity
                 });
             });
             return topics;
@@ -3339,6 +3361,7 @@
                             <span>${Utils.formatNumber(t.likes)}</span>
                         </span>
                     </div>
+                    ${t.activity ? `<div class="xhs-card-activity">${Utils.escapeHtml(t.activity)}</div>` : ''}
                     ${showStats ? `
                         <div class="xhs-card-stats">
                             <span>💬 ${Utils.formatNumber(t.replies)}</span>
