@@ -1530,8 +1530,8 @@
                 }
                 body.xhs-on.xhs-topic .post-controls .btn,
                 body.xhs-on.xhs-topic .post-controls .d-icon,
-                body.xhs-on.xhs-topic .actions .btn,
-                body.xhs-on.xhs-topic .d-button-label {
+                body.xhs-on.xhs-topic .post-controls .btn .d-button-label,
+                body.xhs-on.xhs-topic .actions .btn {
                     color: var(--xhs-text-muted) !important;
                 }
                 body.xhs-on.xhs-topic .post-controls .btn:hover,
