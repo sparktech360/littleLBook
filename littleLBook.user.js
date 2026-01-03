@@ -1700,6 +1700,10 @@
                     align-items: center !important;
                     gap: 6px !important;
                 }
+                body.xhs-on.xhs-topic .topic-footer-button .d-button-label,
+                body.xhs-on.xhs-topic .topic-footer-button span {
+                    color: var(--xhs-c) !important;
+                }
                 body.xhs-on.xhs-topic .topic-footer-button:hover {
                     background: rgba(var(--xhs-rgb), 0.2) !important;
                     transform: translateY(-1px) !important;
