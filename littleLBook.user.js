@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         小L书——LinuxDo仿小红书主题
 // @namespace    http://tampermonkey.net/
-// @version      2.7
+// @version      2.8
 // @license      MIT
 // @description  将LinuxDo改造成小红书风格瀑布流布局，支持自定义主题色
 // @author       JackyLiii
@@ -1024,7 +1024,10 @@
                 }
 
                 body.xhs-on .topic-list,
-                body.xhs-on .topic-list-header { display: none !important; }
+                body.xhs-on .topic-list-header,
+                body.xhs-on .topics table.topic-list,
+                body.xhs-on .topics .topic-list-header,
+                body.xhs-on .topics table { display: none !important; }
 
                 /* ===== 瀑布流布局（错落模式） ===== */
                 .xhs-grid {
@@ -1647,12 +1650,68 @@
                 }
 
                 /* ===== 推荐话题等高网格布局 ===== */
+                /* 使用 flexbox 重新排列布局，让 .row 显示在卡片上方 */
+                body.xhs-on.xhs-topic .more-topics__container {
+                    display: flex !important;
+                    flex-direction: column !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container > .row {
+                    order: 1 !important;
+                    position: relative !important;
+                    z-index: 100 !important;
+                    margin-bottom: 20px !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container > .more-topics__lists {
+                    order: 2 !important;
+                }
+                /* 推荐/相关导航按钮小红书风格 */
+                body.xhs-on.xhs-topic .more-topics__container .nav-pills {
+                    display: flex !important;
+                    gap: 8px !important;
+                    padding: 0 !important;
+                    list-style: none !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container .nav-pills li {
+                    margin: 0 !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container .nav-pills .btn {
+                    background: var(--xhs-card-bg) !important;
+                    border: 1px solid var(--xhs-border) !important;
+                    border-radius: 20px !important;
+                    padding: 6px 16px !important;
+                    font-size: 14px !important;
+                    color: var(--xhs-text-secondary) !important;
+                    transition: all 0.2s ease !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container .nav-pills .btn:hover {
+                    border-color: var(--xhs-c) !important;
+                    color: var(--xhs-c) !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container .nav-pills .btn.active {
+                    background: linear-gradient(135deg, var(--xhs-c), var(--xhs-lighter)) !important;
+                    border-color: var(--xhs-c) !important;
+                    color: #fff !important;
+                }
+                body.xhs-on.xhs-topic .more-topics__container .nav-pills .btn.active .d-icon {
+                    color: #fff !important;
+                }
+                /* 推荐区域隐藏无数据的头像/用户名 */
+                body.xhs-on.xhs-topic .more-topics__lists .xhs-card-author {
+                    display: none !important;
+                }
                 body.xhs-on.xhs-topic .topics .xhs-grid {
+                    position: relative !important;
+                    z-index: 1 !important;
                     column-count: unset !important;
                     display: grid !important;
                     grid-template-columns: repeat(5, 1fr) !important;
                     gap: 16px !important;
                     padding: 20px 0 !important;
+                }
+                /* 推荐话题卡片禁止向上悬浮，避免遮挡 */
+                body.xhs-on.xhs-topic .more-topics__lists .xhs-card:hover {
+                    transform: none !important;
+                    box-shadow: 0 8px 24px var(--xhs-shadow-hover) !important;
                 }
                 @media (max-width: 1400px) {
                     body.xhs-on.xhs-topic .topics .xhs-grid {
@@ -2191,7 +2250,7 @@
         observer: null,
         loadQueue: [],
         isLoading: false,
-        concurrency: 3, // 降低并发数，避免请求过快
+        concurrency: 5, // 并发数
         
         // 速率限制和退避策略
         rateLimiter: {
@@ -2239,6 +2298,7 @@
         ],
 
         init() {
+            // 使用更大的预加载范围，提前加载即将可见的卡片
             this.observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -2246,11 +2306,11 @@
                         const tid = card.dataset.tid;
                         if (tid && !card.dataset.queued) {
                             card.dataset.queued = '1';
-                            this._queueLoad(card, tid, true); // 优先级高
+                            this._queueLoad(card, tid, true);
                         }
                     }
                 });
-            }, { rootMargin: '600px 0px', threshold: 0.01 }); // 增加预加载范围
+            }, { rootMargin: '800px 0px', threshold: 0 });
         },
 
         _queueLoad(card, tid, priority = false) {
@@ -2429,7 +2489,7 @@
 
             if (this.loadQueue.length > 0) {
                 // 添加固定延迟，避免请求过快
-                const delay = this.rateLimiter.failureCount > 0 ? 500 : 150;
+                const delay = this.rateLimiter.failureCount > 0 ? 500 : 100;
                 setTimeout(() => this._processQueue(), delay);
             }
         },
@@ -2529,7 +2589,7 @@
             // 重要关键词（优先标记）
             const importantPatterns = [
                 /^【NUM.*NUM】$/, // 数字+单位
-                /脚本|插件|工具|软件|网站|教程|攻略|方法|技巧|推荐|分享|免费|开源|源码|代码|项目|框架|模板|配置/,
+                /脚本|插件|订阅|抽奖|LDC|小鸡|节点|谷歌|求助|家宽|认证|苹果|安卓|上下文|工具|软件|网站|教程|攻略|方法|技巧|推荐|分享|免费|开源|源码|代码|项目|框架|模板|配置/,
                 /[A-Z][a-z]+[A-Z]|[a-z]+[A-Z]/, // 驼峰命名
                 /^\d+[%％]$/, // 百分比
             ];
@@ -2773,7 +2833,7 @@
                     // 获取剩余的图片
                     const imgs = tempDiv.querySelectorAll('img');
                     imgs.forEach(img => {
-                        const src = img.getAttribute('src') || '';
+                        let src = img.getAttribute('src') || '';
                         // 过滤 emoji、头像、favicon 等非内容图片
                         if (src && !/emoji|avatar|letter_avatar|user_avatar|favicon|icon|logo|badge/i.test(src)) {
                             // 检查图片是否有合理的尺寸属性（排除小图标）
@@ -2783,6 +2843,25 @@
                             if ((width > 0 && width < 50) || (height > 0 && height < 50)) {
                                 return;
                             }
+                            
+                            // 尝试使用 srcset 中更适合卡片尺寸的图片
+                            const srcset = img.getAttribute('srcset') || '';
+                            if (srcset) {
+                                // 找一个适中尺寸的图片（优先 690w 或最小的）
+                                const srcsetParts = srcset.split(',').map(s => s.trim());
+                                for (const part of srcsetParts) {
+                                    const match = part.match(/^(\S+)\s+(\d+)w$/);
+                                    if (match) {
+                                        const [, url, width] = match;
+                                        // 选择 690w 左右的图片，足够清晰又不会太大
+                                        if (parseInt(width) >= 500 && parseInt(width) <= 800) {
+                                            src = url;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            
                             const fullSrc = src.startsWith('/') ? location.origin + src : src;
                             data.images.push(fullSrc);
                             if (data.images.length >= 6) return;
@@ -2809,29 +2888,26 @@
                 const img = card.querySelector('.xhs-card-img');
 
                 if (bgEl && imgBox && img) {
-                    // 预加载图片
-                    const tempImg = new Image();
-                    tempImg.onload = () => {
-                        // 使用 RAF 确保平滑过渡
-                        requestAnimationFrame(() => {
-                            img.src = data.images[0];
-                            // 等待图片实际渲染后再切换
-                            img.onload = () => {
-                                bgEl.style.cssText = 'display:none!important';
-                                imgBox.style.cssText = 'display:block';
-                                // 双重 RAF 确保渲染完成
-                                requestAnimationFrame(() => {
-                                    requestAnimationFrame(() => {
-                                        img.classList.add('show');
-                                    });
-                                });
-                            };
-                        });
+                    const showImage = () => {
+                        bgEl.style.cssText = 'display:none!important';
+                        imgBox.style.cssText = 'display:block';
+                        requestAnimationFrame(() => img.classList.add('show'));
                     };
-                    tempImg.onerror = () => {
+                    
+                    // 先绑定事件，再设置 src
+                    img.onload = showImage;
+                    img.onerror = () => {
                         // 图片加载失败，保持文字封面
                     };
-                    tempImg.src = data.images[0];
+                    
+                    // 设置图片属性
+                    img.decoding = 'async';
+                    img.src = data.images[0];
+                    
+                    // 如果图片已经在缓存中加载完成
+                    if (img.complete && img.naturalWidth > 0) {
+                        showImage();
+                    }
                 }
 
                 if (data.images.length > 1) {
@@ -2927,16 +3003,61 @@
                 }
             }, 500);
 
-            const debouncedRender = Utils.debounce(() => Grid.render(), 150);
+            const debouncedRender = Utils.debounce(() => Grid.render(), 200);
+            
+            // 用于防止推荐区域重复触发
+            let lastMoreTopicsReset = 0;
+            const MORE_TOPICS_COOLDOWN = 1000; // 1秒冷却时间
+            
             this.mutationObserver = new MutationObserver((mutations) => {
-                const hasNewTopics = mutations.some(m =>
-                    m.type === 'childList' &&
-                    m.addedNodes.length > 0 &&
-                    Array.from(m.addedNodes).some(n =>
-                        n.nodeType === 1 && (n.matches?.('tr[data-topic-id]') || n.querySelector?.('tr[data-topic-id]'))
-                    )
-                );
-                if (hasNewTopics && Config.get().enabled) debouncedRender();
+                if (!Config.get().enabled) return;
+                
+                let hasNewTopics = false;
+                let isMoreTopicsChange = false;
+                
+                for (const m of mutations) {
+                    if (m.type !== 'childList' || m.addedNodes.length === 0) continue;
+                    
+                    // 忽略我们自己创建的元素
+                    if (m.target.classList?.contains('xhs-grid')) continue;
+                    
+                    for (const n of m.addedNodes) {
+                        if (n.nodeType !== 1) continue;
+                        // 忽略我们创建的卡片
+                        if (n.classList?.contains('xhs-card') || n.classList?.contains('xhs-grid')) continue;
+                        
+                        // 检查是否有新的话题行
+                        if (n.matches?.('tr[data-topic-id]') || n.querySelector?.('tr[data-topic-id]')) {
+                            hasNewTopics = true;
+                        }
+                        
+                        // 检查是否是推荐话题区域的整体刷新（切换 tab 时）
+                        // 只检查 .topic-list 的添加，这是切换 tab 时的关键变化
+                        if (n.matches?.('table.topic-list') || 
+                            (n.matches?.('.loading-container') && n.querySelector?.('table.topic-list'))) {
+                            const inMoreTopics = n.closest?.('.more-topics__lists') || 
+                                                 m.target.closest?.('.more-topics__lists');
+                            if (inMoreTopics) {
+                                isMoreTopicsChange = true;
+                            }
+                        }
+                    }
+                }
+                
+                // 如果是推荐区域整体刷新，需要先 reset 再 render（带冷却时间）
+                if (isMoreTopicsChange && Utils.isTopicPage()) {
+                    const now = Date.now();
+                    if (now - lastMoreTopicsReset > MORE_TOPICS_COOLDOWN) {
+                        lastMoreTopicsReset = now;
+                        // 稍微延迟，等待 DOM 稳定
+                        setTimeout(() => {
+                            Grid.reset();
+                            Grid.render();
+                        }, 100);
+                    }
+                } else if (hasNewTopics && !isMoreTopicsChange) {
+                    debouncedRender();
+                }
             });
             this.mutationObserver.observe(document.body, { childList: true, subtree: true });
         }
