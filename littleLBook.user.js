@@ -20,6 +20,9 @@
 (function () {
     'use strict';
 
+    // 从 GM_info 自动读取版本号
+    const VERSION = (typeof GM_info !== 'undefined' && GM_info.script?.version) || '2.7';
+
     /* ============================================
      * 早期样式注入（防止闪烁）
      * ============================================ */
@@ -2019,7 +2022,7 @@
                     <div class="xhs-panel-title">
                         <span>🍠</span>
                         <span>小L书</span>
-                        <span class="xhs-panel-ver">v2.6</span>
+                        <span class="xhs-panel-ver">v${VERSION}</span>
                     </div>
                     <div class="xhs-panel-close">×</div>
                 </div>
