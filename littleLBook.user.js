@@ -985,31 +985,22 @@
                     background: var(--xhs-light) !important;
                 }
 
-                body.xhs-on .alert.alert-info.clickable {
-                    position: fixed !important;
-                    top: 60px !important;
-                    left: 50% !important;
-                    transform: translateX(-50%) !important;
-                    z-index: 99999 !important;
-                    width: auto !important;
-                    max-width: 90vw !important;
+                /* 新消息提醒样式 */
+                body.xhs-on .show-more.has-topics .alert.alert-info.clickable {
                     display: inline-flex !important;
                     align-items: center !important;
                     gap: 6px !important;
                     padding: 10px 20px !important;
-                    margin: 0 !important;
                     background: linear-gradient(135deg, var(--xhs-c), var(--xhs-lighter)) !important;
                     color: #fff !important;
                     border: none !important;
                     border-radius: 22px !important;
                     font-size: 13px !important;
                     font-weight: 500 !important;
-                    white-space: nowrap !important;
                     box-shadow: 0 4px 20px rgba(var(--xhs-rgb), 0.35) !important;
-                    cursor: pointer !important;
                 }
-                body.xhs-on .alert.alert-info.clickable::before { content: '🔥' !important; }
-                body.xhs-on .alert.alert-info.clickable span { color: #fff !important; }
+                body.xhs-on .show-more.has-topics .alert.alert-info.clickable::before { content: '🔥' !important; }
+                body.xhs-on .show-more.has-topics .alert.alert-info.clickable span { color: #fff !important; }
 
                 body.xhs-on .d-icon-circle { color: var(--xhs-c) !important; fill: var(--xhs-c) !important; }
                 body.xhs-on .badge-notification {
