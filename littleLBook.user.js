@@ -1780,6 +1780,34 @@
                     padding: 0 !important;
                     margin: 0 !important;
                 }
+
+                /* ===== 深色模式标题区域 ===== */
+                body.xhs-on.xhs-dark.xhs-topic .title-wrapper,
+                body.xhs-on.xhs-dark.xhs-topic .title-wrapper h1,
+                body.xhs-on.xhs-dark.xhs-topic .title-wrapper h1 a,
+                body.xhs-on.xhs-dark.xhs-topic .title-wrapper .fancy-title,
+                body.xhs-on.xhs-dark.xhs-topic #topic-title,
+                body.xhs-on.xhs-dark.xhs-topic #topic-title h1,
+                body.xhs-on.xhs-dark.xhs-topic #topic-title h1 a,
+                body.xhs-on.xhs-dark.xhs-topic #topic-title .fancy-title {
+                    color: #e0e0e0 !important;
+                }
+                body.xhs-on.xhs-dark.xhs-topic .title-wrapper h1 a:hover,
+                body.xhs-on.xhs-dark.xhs-topic #topic-title h1 a:hover {
+                    color: var(--xhs-c) !important;
+                }
+                /* 深色模式编辑图标 */
+                body.xhs-on.xhs-dark.xhs-topic .edit-topic,
+                body.xhs-on.xhs-dark.xhs-topic .edit-topic svg {
+                    color: #888888 !important;
+                    fill: #888888 !important;
+                }
+                body.xhs-on.xhs-dark.xhs-topic .edit-topic:hover,
+                body.xhs-on.xhs-dark.xhs-topic .edit-topic:hover svg {
+                    color: var(--xhs-c) !important;
+                    fill: var(--xhs-c) !important;
+                }
+
                 /* 深色模式分类区域文字 */
                 body.xhs-on.xhs-dark.xhs-topic .topic-category,
                 body.xhs-on.xhs-dark.xhs-topic .topic-category *,
